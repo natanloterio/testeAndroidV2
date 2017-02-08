@@ -12,7 +12,8 @@ public class PessoaDBHelper extends SQLiteOpenHelper {
             "   id INT PRIMARY KEY NOT NULL,\n" +
             "   nome TEXT NOT NULL,\n" +
             "   sobrenome TEXT NOT NULL,\n" +
-            "   dataNascimento INTEGER)";
+            "   dataNascimento INTEGER,\n" +
+            "   ativo INTEGER)";
 
     public PessoaDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

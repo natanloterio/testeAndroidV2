@@ -75,7 +75,7 @@ public class DaoPessoaLocal implements IDao<Pessoa> {
         List<Pessoa> pessoas = new ArrayList<>();
         if(c.moveToFirst()) {
             do {
-                long id = c.getLong(0);
+                long id = c.getLong(c.getColumnIndex(COLUNA_ID));
                 boolean ativo = c.getInt(c.getColumnIndex(COLUNA_ATIVO))>0;
                 String nome = c.getString(c.getColumnIndex(COLUNA_NOME));
                 String sobrenome = c.getString(c.getColumnIndex(COLUNA_SOBRENOME));
