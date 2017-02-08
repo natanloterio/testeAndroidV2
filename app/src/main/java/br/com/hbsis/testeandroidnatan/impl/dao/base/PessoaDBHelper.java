@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class PessoaDBHelper extends SQLiteOpenHelper {
-    // If you change the database schema, you must increment the database version.
+
     public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "hbsis.db";
     private String CREATE_SQL="CREATE TABLE pessoa(\n" +
@@ -13,9 +13,11 @@ public class PessoaDBHelper extends SQLiteOpenHelper {
             "   nome TEXT NOT NULL,\n" +
             "   sobrenome TEXT NOT NULL,\n" +
             "   dataNascimento INTEGER)";
+
     public PessoaDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_SQL);
     }

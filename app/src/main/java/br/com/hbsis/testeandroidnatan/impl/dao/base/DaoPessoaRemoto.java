@@ -22,6 +22,7 @@ import br.com.hbsis.testeandroidnatan.util.Connector;
  */
 
 public class DaoPessoaRemoto implements IDao<Pessoa> {
+    
     private String urlJSON="https://testetecnico.herokuapp.com/pessoas";
 
     @Override

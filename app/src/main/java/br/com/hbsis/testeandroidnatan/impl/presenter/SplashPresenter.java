@@ -6,6 +6,7 @@ import android.content.Intent;
 import br.com.hbsis.testeandroidnatan.base.BasePresenter;
 import br.com.hbsis.testeandroidnatan.impl.dao.base.BaseDaoFactory;
 import br.com.hbsis.testeandroidnatan.impl.view.activity.MainActivity;
+import br.com.hbsis.testeandroidnatan.util.NetworkUtil;
 
 /**
  * Created by natan on 08/02/17.
@@ -40,6 +41,14 @@ public class SplashPresenter extends BasePresenter {
 
 
     private boolean deveBaixarNovaCargaDeDados() throws Exception {
+        return bancoVazio() && isNetworkAvailable();
+    }
+
+    private boolean isNetworkAvailable() {
+        return NetworkUtil.isNetworkAvailable(getActivityContext());
+    }
+
+    private boolean bancoVazio() throws Exception {
         int count = getDaoFactory().getInstance(BaseDaoFactory.DaoFactoryType.LOCAL).getAll().size();
         return count<=0;
     }

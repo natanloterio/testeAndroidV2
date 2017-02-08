@@ -49,8 +49,7 @@ public class MainPresenter extends BasePresenter{
             @Override
             protected File doInBackground(Void... params) {
                 try {
-                    File novoApk = baixarNovoApk();
-                    return novoApk;
+                    return baixarNovoApk();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -61,6 +60,7 @@ public class MainPresenter extends BasePresenter{
             @Override
             protected void onPostExecute(File novoApk) {
                 getMainView().esconderProgressDialog();
+
                 if(novoApk!=null){
                     instalarNovoApk(novoApk);
                 }else{

@@ -1,6 +1,7 @@
 package br.com.hbsis.testeandroidnatan.base;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 
@@ -51,36 +52,64 @@ public abstract class BasePresenter {
     }
 
     private void inicializarPresenter() throws Exception {
-        CarregarDados asyncCarregarDados = new CarregarDados(new CarregarDados.IAntesCarregarDados() {
+        CarregarDados asyncCarregarDados = new CarregarDados(
+                getListenerAntesCarregarDados(),
+                getListenerCarregarDados(),
+                getListenerDepoisCarregarDados(),
+                getListenerOnError());
+
+        asyncCarregarDados.execute();
+
+    }
+
+    @NonNull
+    private CarregarDados.IAntesCarregarDados getListenerAntesCarregarDados() {
+        return new CarregarDados.IAntesCarregarDados() {
             @Override
             public void antesCarregarDadosAsyncTask() {
                 desabilitarAtualizacaoDeViews();
                 antesDeCarregarDados();
             }
-        }, new CarregarDados.ICarregarDados() {
+        };
+    }
+
+    @NonNull
+    private CarregarDados.ICarregarDados getListenerCarregarDados() {
+        return new CarregarDados.ICarregarDados() {
             @Override
             public void carregarDadosAsyncTask() throws Exception {
                 carrearDados();
             }
-        }, new CarregarDados.IDepoisCarregarDados() {
+        };
+    }
+
+    @NonNull
+    private CarregarDados.IDepoisCarregarDados getListenerDepoisCarregarDados() {
+        return new CarregarDados.IDepoisCarregarDados() {
             @Override
             public void depoisCarregarDadosAsyncTask() {
-                mainView.initializeViews();
-                mainView.registerViews();
+                setupMainView();
                 habilitarAtualizacaoDeViews();
                 inicializarAdaptersDasViews();
                 atualizarViews();
                 depoisDeCarregarDados();
             }
-        },
-                new CarregarDados.IErrorListener() {
-                    @Override
-                    public void onError() {
-                        getMainView().mostrarAlertaFatal("Erro ao carregar os dados principais");
-                    }
-                });
-        asyncCarregarDados.execute();
+        };
+    }
 
+    private void setupMainView() {
+        mainView.initializeViews();
+        mainView.registerViews();
+    }
+
+    @NonNull
+    private CarregarDados.IErrorListener getListenerOnError() {
+        return new CarregarDados.IErrorListener() {
+            @Override
+            public void onError() {
+                getMainView().mostrarAlertaFatal("Erro ao carregar os dados principais");
+            }
+        };
     }
 
     protected void inicializarAdaptersDasViews(){
@@ -98,11 +127,10 @@ public abstract class BasePresenter {
     }
 
     private void atualizarViews() {
-        if(!podeAtualizarViews()){
-            return;
-        }
-        for(IViewNotifier i:views){
-            i.atualizarView();
+        if(podeAtualizarViews()){
+            for(IViewNotifier i:views){
+                i.atualizarView();
+            }
         }
     }
 
