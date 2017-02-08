@@ -24,7 +24,6 @@ public class DaoPessoaLocal implements IDao<Pessoa> {
     private String SELECT_SQL="Select * from pessoa";
 
     private final String COLUNA_ID = "id";
-    private final String COLUNA_ATIVO = "ativo";
     private final String COLUNA_NOME = "nome";
     private final String COLUNA_SOBRENOME = "sobrenome";
     private final String COLUNA_DATANASCIMENTO = "dataNascimento";
@@ -55,17 +54,6 @@ public class DaoPessoaLocal implements IDao<Pessoa> {
         return newRowId;
     }
 
-    public void setAtivo(Long id, boolean isAtivo) {
-
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(COLUNA_ATIVO,isAtivo);
-
-        long newRowId = db.update(TABLE_NAME, values, "id="+id, null);
-        db.close();
-    }
-
     @Override
     public List<Pessoa> getAll() {
 
@@ -75,15 +63,12 @@ public class DaoPessoaLocal implements IDao<Pessoa> {
         List<Pessoa> pessoas = new ArrayList<>();
         if(c.moveToFirst()) {
             do {
-                long id = c.getLong(0);
-                boolean ativo = c.getInt(c.getColumnIndex(COLUNA_ATIVO))>0;
+                String id = c.getString(0);
                 String nome = c.getString(c.getColumnIndex(COLUNA_NOME));
-                String sobrenome = c.getString(c.getColumnIndex(COLUNA_NOME));
+                String sobrenome = c.getString(c.getColumnIndex(COLUNA_SOBRENOME));
                 long longdataNascimenot = c.getLong(c.getColumnIndex(COLUNA_DATANASCIMENTO));
                 Date dataNascimento = new Date(longdataNascimenot);
                 Pessoa p = new Pessoa();
-                p.setId(id);
-                p.setAtivo(ativo);
                 p.setNome(nome);
                 p.setSobrenome(sobrenome);
                 p.setDataNascimento(dataNascimento);
@@ -98,5 +83,4 @@ public class DaoPessoaLocal implements IDao<Pessoa> {
     public SQLiteOpenHelper getNewDBHelper() {
         return new PessoaDBHelper(context);
     }
-
 }
